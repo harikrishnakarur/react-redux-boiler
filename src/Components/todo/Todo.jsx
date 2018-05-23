@@ -1,31 +1,35 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Checkbox from 'react-toolbox/lib/checkbox';
+import { todo } from '../Actions';
+import TodoReducer from './TodoReducer';
 
-export default class TestCheckbox extends React.Component {
+class TestCheckbox extends React.Component {
     constructor(){
         super();
         this.state = {
-      checkbox: [
-          {name: "Milk", checked: false},
-          {name: "Eggs", checked: false},
-          {name: "Bread", checked: false}
-      ]
+          checkbox: [
+              {name: "Milk", checked: false},
+              {name: "Eggs", checked: false},
+              {name: "Bread", checked: false}
+          ]
   };
     }
   
 
   handleChange = (field, value) => {
-      let tempState = this.state.checkbox;
+      let tempState = this.props.todoState;
       tempState.map(function(cb){
           if(cb.name === field){
               cb.checked = value;
           }
       })
-      this.setState({Checkbox: tempState})
+      this.props.todo(tempState)
   };
 
   render () {
-      let stateTemp = this.state.checkbox;
+      console.log(this.props)
+      let stateTemp = this.props.todoState;
       let check = stateTemp.map(function(cb){
           return(
           <Checkbox
@@ -54,3 +58,19 @@ export default class TestCheckbox extends React.Component {
     );
   }
 }
+export function mapDispatchToProps(dispatch){
+    return {
+        todo: (evt)=> dispatch(todo(evt))
+    }
+}
+
+function mapStateToProps(state){
+    console.log(state)
+    return{
+        todoState: state.TodoReducer.todo
+    }
+}
+
+const withConnect = connect(mapStateToProps,mapDispatchToProps);
+
+export default (withConnect)(TestCheckbox)

@@ -89,8 +89,15 @@ export default class Search extends React.Component {
     }
     filterIt(arr, searchKey) {
         return arr.filter(function(obj) {
-          return ["id","name","address"].some(function(key) {
-            return obj[key].toLowerCase().includes(searchKey.toLowerCase());
+          return Object.keys(obj).some(function(key) {
+            if(typeof obj[key] === "string"){
+              return obj[key].toLowerCase().includes(searchKey.toLowerCase());
+            }else if(typeof obj[key] === "object"){
+              return obj[key].reduce((a,b) => {
+                return a || b.toLowerCase().indexOf(searchKey.toLowerCase()) > -1
+              },false)
+            }
+            return
           })
         });
       }

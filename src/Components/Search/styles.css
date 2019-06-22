@@ -1,0 +1,5 @@
+.cardContainer{
+    height: 300px;
+    overflow: auto;
+    width: 350px;
+}

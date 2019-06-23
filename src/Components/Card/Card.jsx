@@ -10,10 +10,6 @@ export default class Card extends React.Component {
     render(){
         const { id, name, address, foundIn=[] } = this.props.data
         const { index, hoverIndex, searchText } = this.props
-        const foundInMapping = {
-            items: "Items",
-            pincode: "Pincode"
-        }
         let nameToDisplay,idToDisplay,addressToDisplay
         const regex = new RegExp(searchText,'i');
         nameToDisplay = name.replace(regex, `<b>${name.match(regex)}</b>`)

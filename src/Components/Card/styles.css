@@ -1,3 +1,17 @@
 .card{
     height: 100px;
+    border: 1px solid #c0c0c0;
+    padding: 10px;
+}
+
+.cardName{
+    font-size: 14px;
+}
+
+.cardIdAddress{
+    font-size: 12px;
+}
+
+.foundIn{
+    font-size: 10px;
 }

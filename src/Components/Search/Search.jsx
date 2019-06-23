@@ -89,13 +89,18 @@ export default class Search extends React.Component {
     }
     filterIt(arr, searchKey) {
         return arr.filter(function(obj) {
+          obj.foundIn = []
           return Object.keys(obj).some(function(key) {
-            if(typeof obj[key] === "string"){
-              return obj[key].toLowerCase().includes(searchKey.toLowerCase());
-            }else if(typeof obj[key] === "object"){
-              return obj[key].reduce((a,b) => {
+            if(["name", "id", "address","pincode"].indexOf(key) > -1){
+              const match = obj[key].toLowerCase().includes(searchKey.toLowerCase());
+              if(match) obj.foundIn.push(key)
+              return match
+            }else if(["items"].indexOf(key) > -1){
+              const match = obj[key].reduce((a,b) => {
                 return a || b.toLowerCase().indexOf(searchKey.toLowerCase()) > -1
               },false)
+              if(match) obj.foundIn.push(key)
+              return match
             }
             return
           })
@@ -130,17 +135,19 @@ export default class Search extends React.Component {
                     index={i}
                     hoverIndex={this.state.hoverIndex}
                     handleMouseOver={this.handleMouseOver}
-                    keyboardMode={this.state.keyboardMode}/>
+                    keyboardMode={this.state.keyboardMode}
+                    searchText={this.state.input}
+                    />
                 </div>
             )
         })
         return (
-        <div tabIndex="0" onKeyUp={this.keyboardHandler} style={this.state.keyboardMode ? {cursor: 'none'} : {cursor: 'default'}} onMouseMove={()=>this.setState({keyboardMode: false})}>
+        <div tabIndex="0" onKeyUp={this.keyboardHandler} onMouseMove={()=>this.setState({keyboardMode: false})}>
             <input
             onChange={this.inputChange}
             placeholder="Search users by ID, address, name"
             ></input>
-            <div className="cardContainer" ref={"cardContainer"}>
+            <div className="cardContainer" ref={"cardContainer"} style={this.state.keyboardMode ? {cursor: 'none'} : {cursor: 'pointer'}}>
                 { cards.length ? cards : (<div>No Data Available</div>)}
             </div>
         </div>
